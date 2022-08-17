@@ -1,0 +1,19 @@
+{
+  "commitish" : "1.1.0",
+  "iOS" : [
+    {
+      "swiftToolchainVersion" : "5.3.2 (swiftlang-1200.0.45 clang-1200.0.32.28)",
+      "hash" : "6358b5f6678e0c4a17b0015697824ec2d638bb1ffe6bcc4ddec045bdd6ba94db",
+      "name" : "DataKit",
+      "container" : "DataKit.xcframework",
+      "identifier" : "ios-arm64"
+    },
+    {
+      "swiftToolchainVersion" : "5.3.2 (swiftlang-1200.0.45 clang-1200.0.32.28)",
+      "hash" : "7d932556e59bcc9e44cb67ef13352dee7fe0da86352a79ec14f227b735578789",
+      "name" : "DataKit",
+      "container" : "DataKit.xcframework",
+      "identifier" : "ios-arm64_x86_64-simulator"
+    }
+  ]
+}

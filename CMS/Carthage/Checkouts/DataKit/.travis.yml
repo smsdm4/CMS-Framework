@@ -1,0 +1,42 @@
+language: objective-c
+osx_image: xcode12.5
+sudo: false
+cache:
+  cargo: true
+  directories:
+    - vendor/gems
+env:
+  global:
+  - LC_CTYPE=en_US.UTF-8
+  - LANG=en_US.UTF-8
+  - LANGUAGE=en_US.UTF-8
+  - FASTLANE_LANE=ci_build
+branches:
+  only:
+    - master
+matrix:
+  include:
+    - osx_image: xcode12.5
+      env: FASTLANE_LANE=code_coverage FASTLANE_ENV=default
+    - osx_image: xcode11
+      env: FASTLANE_ENV=ios13_xcode11
+    - osx_image: xcode10.2
+      env: FASTLANE_ENV=osx14
+    - osx_image: xcode11
+      env: FASTLANE_ENV=osx15
+install: make setup
+before_script:
+  - set -o pipefail
+  - if [ "$TRAVIS_PULL_REQUEST" != "false" -a "$FASTLANE_LANE" == "code_coverage" ]; then
+      bundle exec danger;
+    fi
+script: make cibuild FL_LANE=$FASTLANE_LANE FL_ENV=$FASTLANE_ENV
+after_success:
+  # Run codecov
+  - if [ "$FASTLANE_LANE" == "code_coverage" ]; then
+     bash <(curl -s https://codecov.io/bash) -J 'DataKit';
+    fi
+after_failure:
+ - cat -n ~/Library/Logs/scan/*
+ - cat -n $TMPDIR/com.apple.dt.XCTest-status/Session*.log
+ - cat -n ~/Library/Logs/DiagnosticReports/xctest*.crash

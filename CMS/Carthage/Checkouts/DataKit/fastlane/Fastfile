@@ -1,0 +1,238 @@
+# Customise this file, documentation can be found here:
+# https://github.com/KrauseFx/fastlane/tree/master/docs
+# All available actions: https://github.com/KrauseFx/fastlane/blob/master/docs/Actions.md
+# can also be listed using the `fastlane actions` command
+
+# Change the syntax highlighting to Ruby
+# All lines starting with a # are ignored when running `fastlane`
+
+# By default, fastlane will send which actions are used
+# No personal data is shared, more information on https://github.com/fastlane/enhancer
+# Uncomment the following line to opt out
+# opt_out_usage
+
+# If you want to automatically update fastlane if a new version is available:
+# update_fastlane
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version "2.187"
+
+def true?(value)
+  if value.nil?
+    raise "Nil is not true or false"
+  end
+  value.to_s.downcase == "true"
+end
+
+#Test Lanes
+desc "Runs tests and builds example for the given environment"
+desc "The lane to run by ci on every commit and PR. This lanes calls the lanes `static_code_analysis`, `generate_xcodeproj`, `test_framework` and `generate_docs`."
+desc "####Example:"
+desc "```\nfastlane ci_build configuration:Debug skip_generate_xcodeproj:true --env osx\n```"
+desc "####Options"
+desc " * **`configuration`**: The build configuration to use [default: Release]. (`SC_CONFIGURATION`)"
+desc " * **`skip_generate_xcodeproj`**: Whether to slip the generate_xcodeproj lane [default: false]. (`SC_SKIP_generate_xcodeproj`)"
+desc ""
+lane :ci_build do |options|
+  if options[:configuration]
+    configuration = options[:configuration]
+  elsif ENV["SC_CONFIGURATION"]
+    configuration = ENV["SC_CONFIGURATION"]
+  else
+    configuration = "Release"
+  end
+
+  if !options[:skip_generate_xcodeproj].nil?
+    skip_generate_xcodeproj = options[:skip_generate_xcodeproj]
+  elsif !ENV["SC_SKIP_generate_xcodeproj"].nil?
+    skip_generate_xcodeproj = true?(ENV["SC_SKIP_generate_xcodeproj"])
+  else
+    skip_generate_xcodeproj = false
+  end
+
+  # Generate the xcodeproj
+  generate_xcodeproj options unless skip_generate_xcodeproj
+
+  # Run swiftlint
+  static_code_analysis options
+
+  # Test the whether the project still builds and passes the tests
+  test_framework(configuration: configuration)
+
+  # When example project is available see if it still compiles
+  if ENV["EXAMPLE_WORKSPACE"] && ENV["EXAMPLE_SCHEME"]
+    build_example(configuration: configuration)
+  end
+
+  # Generate the documentation
+  gen_docs
+end
+
+desc "Generate the Xcodeproj based on Xcodegen or SPM"
+desc "####Example:"
+desc "```\nfastlane generate_xcodeproj\n```"
+desc ""
+lane :generate_xcodeproj do |options|
+  if File.exist? "../project.yml"
+    # Let Xcodegen generate the Project
+    carthage(command: "bootstrap", no_build: false, use_binaries: false, use_xcframeworks: true, cache_builds: true)
+    sh("xcodegen", "generate", "--spec", "../project.yml")
+  else
+    # Let SPM create the xcodeproj
+    spm(command: "resolve")
+    spm_generate_xcodeproj options
+  end
+end
+
+desc "Update the xcodeproj to fix the Swift Package manager dependency path(s)"
+desc "####Example:"
+desc "```\nfastlane spm_generate_xcodeproj\n```"
+desc ""
+lane :spm_generate_xcodeproj do |options|
+  spm(
+    command: "generate-xcodeproj",
+    xcconfig: "Package.xcconfig"
+  )
+  fix_xcodeproj_config
+end
+
+desc "Runs all tests for the given environment"
+desc "Set `scan` action environment variables to control test configuration"
+desc "####Example:"
+desc "```\nfastlane test_framework configuration:Debug --env osx\n```"
+desc "####Options"
+desc " * **`configuration`**: The build configuration to use."
+desc ""
+lane :test_framework do |options|
+  scan(
+    configuration: options[:configuration]
+  )
+end
+
+desc "Produces code coverage information"
+desc "Set `scan` action environment variables to control test configuration"
+desc "####Example:"
+desc "```\nfastlane code_coverage configuration:Debug skip_generate_xcodeproj:false\n```"
+desc "####Options"
+desc " * **`configuration`**: The build configuration to use. The only supported configuration is the `Debug` configuration."
+desc " * **`skip_generate_xcodeproj`**: Whether to slip the generate_xcodeproj lane [default: false]. (`SC_SKIP_generate_xcodeproj`)"
+desc ""
+lane :code_coverage do |options|
+  if options[:configuration] != "Debug"
+    UI.important("Not running code coverage lane for #{options[:configuration]} configuration")
+  else
+    if !options[:skip_generate_xcodeproj].nil?
+      skip_generate_xcodeproj = options[:skip_generate_xcodeproj]
+    elsif !ENV["SC_SKIP_generate_xcodeproj"].nil?
+      skip_generate_xcodeproj = true?(ENV["SC_SKIP_generate_xcodeproj"])
+    else
+      skip_generate_xcodeproj = false
+    end
+
+    generate_xcodeproj options unless skip_generate_xcodeproj
+    scan(
+      configuration: options[:configuration],
+      xcargs: "-enableCodeCoverage YES -skipUnavailableActions"
+    )
+  end
+end
+
+desc "Run static code analysis (swiftlint)"
+desc "####Example:"
+desc "```\nfastlane static_code_analysis fail_build:true strict:false\n```"
+desc "####Options"
+desc " * **`fail_build`**: Whether the build should fail when linting produces errors [default: true]. ('SC_CODE_ANALYSIS_FAILS_BUILD')"
+desc " * **`strict`**: Lint mode strict [default: true]. ('SC_CODE_ANALYSIS_STRICT')"
+desc ""
+lane :static_code_analysis do |options|
+  if !options[:fail_build].nil?
+    fail_build = options[:fail_build]
+  elsif !ENV['SC_CODE_ANALYSIS_FAILS_BUILD'].nil?
+    fail_build = true?(ENV['SC_CODE_ANALYSIS_FAILS_BUILD'])
+  else
+    fail_build = true
+  end
+
+  if !options[:strict].nil?
+    strict = options[:strict]
+  elsif !ENV['SC_CODE_ANALYSIS_STRICT'].nil?
+    strict = true?(ENV['SC_CODE_ANALYSIS_STRICT'])
+  else
+    strict = true
+  end
+
+  swiftlint(
+    mode: :lint,
+    strict: strict,
+    ignore_exit_status: !fail_build,
+    quiet: true
+  )
+end
+
+desc "Builds the example file"
+desc "Set `xcodebuild` action environment variables to control build configuration"
+desc "####Example:"
+desc "```\nfastlane build_example configuration:Debug --env osx\n```"
+desc "####Options"
+desc " * **`configuration`**: The build configuration to use."
+desc ""
+lane :build_example do |options|
+
+  xcodebuild(
+    project: ENV["SC_PROJECT"],
+    scheme: ENV["EXAMPLE_SCHEME"],
+    build: true,
+    destination: ENV["EXAMPLE_DESTINATION"],
+    configuration: options[:configuration],
+    build_settings: [["ONLY_ACTIVE_ARCH", "NO"]]
+  )
+end
+
+desc "Fix Xcodeproj build configuration where needed"
+desc "Set Swift Bridging Header for Benchmark target"
+desc "Access: private"
+desc ""
+lane :fix_xcodeproj_config do |options|
+  # Open the project
+  project = Xcodeproj::Project.open("../DataKit.xcodeproj")
+  targets = project.targets.select { |target| target.name == "DataKitBenchmark" }
+  targets.each do |target|
+    target.build_configurations.each do |config|
+      # Add the BridgingHeader to the target build settings
+      config.build_settings['SWIFT_OBJC_BRIDGING_HEADER'] ||= 'Sources/DataKitBenchmark/BenchmarkBridgingHeader.h'
+    end
+  end
+  # add DataKit Scheme for iOS builds, since they don't have command line tool targets
+  schemes_path = Dir[File.join(project.path, 'xcshareddata', 'xcschemes', '*.xcscheme')]
+  schemes_path.select do |scheme_path|
+    File.basename(scheme_path, '.xcscheme') == ENV["SC_OSX_FRAMEWORK_SCHEME"]
+  end.each do |scheme_path|
+    # Read into XCScheme
+    scheme = Xcodeproj::XCScheme.new scheme_path
+    build_action = Xcodeproj::XCScheme::BuildAction::new
+    scheme.build_action.entries.select do |entry|
+      entry.buildable_references.select do |reference|
+        reference.target_name == ENV["SC_IOS_FRAMEWORK_TARGET"]
+      end.length > 0
+      # references.length > 0
+    end.each do |entry|
+      build_action.add_entry entry
+    end
+    scheme.build_action = build_action
+    # Save as IOS SC_IOS_FRAMEWORK_SCHEME, true = shared
+    scheme.save_as(project.path, ENV["SC_IOS_FRAMEWORK_SCHEME"], true)
+  end
+
+  # Save the project
+  project.save
+end
+
+desc "Run the jazzy documentation generator"
+desc ""
+lane :gen_docs do |options|
+  jazzy(config: ".jazzy.yml")
+end
+
+# More information about multiple platforms in fastlane: https://github.com/KrauseFx/fastlane/blob/master/docs/Platforms.md
+# All available actions: https://github.com/KrauseFx/fastlane/blob/master/docs/Actions.md

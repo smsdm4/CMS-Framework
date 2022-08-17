@@ -1,0 +1,148 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.3.2 (swiftlang-1200.0.45 clang-1200.0.32.28)
+// swift-module-flags: -target x86_64-apple-ios12.1-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name GemCommonsKit
+import Foundation
+import Swift
+public class AnyWrapper<T> {
+  final public let value: T
+  required public init(_ value: T)
+  @objc deinit
+}
+public class AnyMutableWrapper<T> {
+  public var value: T
+  required public init(_ value: T)
+  @objc deinit
+}
+extension Array where Element == Swift.UInt8 {
+  public var data: Foundation.Data {
+    get
+  }
+}
+public class BlockingVar<T> {
+  public init()
+  public init(_ value: T)
+  public var value: T {
+    get
+    set
+  }
+  public var isFulfilled: Swift.Bool {
+    get
+  }
+  @objc deinit
+}
+public enum CommonError : Swift.Error {
+  case notImplementedError
+  public static func == (a: GemCommonsKit.CommonError, b: GemCommonsKit.CommonError) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+}
+public func abstractError(file: Swift.StaticString = #file, line: Swift.UInt = #line) -> Swift.Never
+extension FileManager {
+  public static func logfilePath(_ filename: Swift.String = "logfile.txt") -> Swift.String
+}
+public func DLog(_ message: @autoclosure () -> Swift.String, filename: Swift.String = #file, function: Swift.String = #function, line: Swift.Int = #line)
+public func ALog(_ message: Swift.String, filename: Swift.String = #file, function: Swift.String = #function, line: Swift.Int = #line)
+extension Data {
+  public typealias WriteResult = (url: Foundation.URL, data: Foundation.Data)
+  public func save(to file: Foundation.URL, options: Foundation.Data.WritingOptions = .atomicWrite) -> Swift.Result<Foundation.Data.WriteResult, Swift.Error>
+}
+extension Data {
+  public static let empty: Foundation.Data
+}
+extension Bundle {
+  public func resourceFilePath(in bundle: Swift.String, for filename: Swift.String) -> Swift.String
+  public func testResourceFilePath(in bundle: Swift.String, for filename: Swift.String) -> Swift.String
+}
+extension URL {
+  public func readFileContents() throws -> Foundation.Data
+}
+extension String {
+  public enum FileReaderError : Swift.Error {
+    case invalidURL(Swift.String)
+    case noSuchFileAtPath(Swift.String)
+  }
+  public func readFileContents() throws -> Foundation.Data
+  public var asURL: Foundation.URL {
+    get
+  }
+}
+extension String {
+  public var isNumerical: Swift.Bool {
+    get
+  }
+  public var isDigitsOnly: Swift.Bool {
+    get
+  }
+  public var fullRange: Foundation.NSRange {
+    get
+  }
+}
+extension String {
+  @available(*, deprecated)
+  public func hasSuffix(pattern: Swift.String = "\\[(\\d*)\\]") -> Swift.String?
+}
+extension String {
+  public func match(pattern: Swift.String, group number: Swift.Int = 1) -> Swift.String?
+}
+@propertyWrapper public struct Synchronized<T> {
+  public init(wrappedValue backing: T)
+  public var wrappedValue: T {
+    get
+    set
+  }
+  public var projectedValue: GemCommonsKit.Synchronized<T> {
+    get
+    set
+  }
+}
+public class SynchronizedVar<T> {
+  public init(_ value: T)
+  public var value: T {
+    get
+  }
+  public func set(transaction block: @escaping (T) -> T)
+  @objc deinit
+}
+extension Thread {
+  public var didNotStart: Swift.Bool {
+    get
+  }
+}
+public class WeakArray<T> {
+  public init()
+  public func add(object: T)
+  public func object(at index: Swift.Int) -> T?
+  public func insert(object: T, at index: Swift.Int)
+  public func replaceObject(at index: Swift.Int, with object: T)
+  public func removeObject(at index: Swift.Int)
+  public var count: Swift.Int {
+    get
+  }
+  public subscript(index: Swift.Int) -> T? {
+    get
+  }
+  public func index(of object: T) -> Swift.Int?
+  @objc deinit
+}
+extension WeakArray {
+  convenience public init(objects: [T])
+  public var array: [T] {
+    get
+  }
+}
+extension Array where Element : AnyObject {
+  public var weakArray: GemCommonsKit.WeakArray<Element> {
+    get
+  }
+}
+public class WeakRef<T> where T : AnyObject {
+  weak public var value: T? {
+    get
+  }
+  required public init(_ obj: T)
+  @objc deinit
+}
+extension GemCommonsKit.CommonError : Swift.Equatable {}
+extension GemCommonsKit.CommonError : Swift.Hashable {}

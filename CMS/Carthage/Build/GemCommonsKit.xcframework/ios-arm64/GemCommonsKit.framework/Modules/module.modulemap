@@ -1,0 +1,4 @@
+framework module GemCommonsKit {
+  header "GemCommonsKit-Swift.h"
+  requires objc
+}

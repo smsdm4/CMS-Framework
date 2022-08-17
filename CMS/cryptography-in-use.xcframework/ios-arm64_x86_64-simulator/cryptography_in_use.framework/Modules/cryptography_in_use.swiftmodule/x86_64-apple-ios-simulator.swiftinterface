@@ -1,0 +1,613 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.6.1 (swiftlang-5.6.0.323.66 clang-1316.0.20.12)
+// swift-module-flags: -target x86_64-apple-ios11.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name cryptography_in_use
+import CryptoKit
+import DataKit
+import Foundation
+import GemCommonsKit
+import Security
+import Swift
+import _Concurrency
+@_exported import cryptography_in_use
+@_hasMissingDesignatedInitializers public class ASN1Identifier : Swift.CustomStringConvertible {
+  public enum Class : Swift.UInt8 {
+    case universal
+    case application
+    case contextSpecific
+    case `private`
+    public init?(rawValue: Swift.UInt8)
+    public typealias RawValue = Swift.UInt8
+    public var rawValue: Swift.UInt8 {
+      get
+    }
+  }
+  public enum TagNumber : Swift.UInt8 {
+    case endOfContent
+    case boolean
+    case integer
+    case bitString
+    case octetString
+    case null
+    case objectIdentifier
+    case objectDescriptor
+    case external
+    case read
+    case enumerated
+    case embeddedPdv
+    case utf8String
+    case relativeOid
+    case sequence
+    case set
+    case numericString
+    case printableString
+    case t61String
+    case videotexString
+    case ia5String
+    case utcTime
+    case generalizedTime
+    case graphicString
+    case visibleString
+    case generalString
+    case universalString
+    case characterString
+    case bmpString
+    public init?(rawValue: Swift.UInt8)
+    public typealias RawValue = Swift.UInt8
+    public var rawValue: Swift.UInt8 {
+      get
+    }
+  }
+  public static let constructedTag: Swift.UInt8
+  public func typeClass() -> cryptography_in_use.ASN1Identifier.Class
+  public func isPrimitive() -> Swift.Bool
+  public func isConstructed() -> Swift.Bool
+  public func tagNumber() -> cryptography_in_use.ASN1Identifier.TagNumber
+  public var description: Swift.String {
+    get
+  }
+  @objc deinit
+}
+extension cryptography_in_use.X509Certificate {
+  @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class BasicConstraintExtension : cryptography_in_use.X509Extension {
+    public var isCA: Swift.Bool {
+      get
+    }
+    public var pathLenConstraint: Swift.UInt64? {
+      get
+    }
+    @objc deinit
+  }
+  @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class SubjectKeyIdentifierExtension : cryptography_in_use.X509Extension {
+    override public var value: Any? {
+      get
+    }
+    @objc deinit
+  }
+  public struct AuthorityInfoAccess {
+    public let method: Swift.String
+    public let location: Swift.String
+  }
+  @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class AuthorityInfoAccessExtension : cryptography_in_use.X509Extension {
+    public var infoAccess: [cryptography_in_use.X509Certificate.AuthorityInfoAccess]? {
+      get
+    }
+    @objc deinit
+  }
+  @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class AuthorityKeyIdentifierExtension : cryptography_in_use.X509Extension {
+    public var keyIdentifier: Foundation.Data? {
+      get
+    }
+    public var certificateIssuer: [Swift.String]? {
+      get
+    }
+    public var serialNumber: Foundation.Data? {
+      get
+    }
+    @objc deinit
+  }
+  public struct CertificatePolicyQualifier {
+    public let oid: Swift.String
+    public let value: Swift.String?
+  }
+  public struct CertificatePolicy {
+    public let oid: Swift.String
+    public let qualifiers: [cryptography_in_use.X509Certificate.CertificatePolicyQualifier]?
+  }
+  @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class CertificatePoliciesExtension : cryptography_in_use.X509Extension {
+    public var policies: [cryptography_in_use.X509Certificate.CertificatePolicy]? {
+      get
+    }
+    @objc deinit
+  }
+  @_inheritsConvenienceInitializers @_hasMissingDesignatedInitializers public class CRLDistributionPointsExtension : cryptography_in_use.X509Extension {
+    public var crls: [Swift.String]? {
+      get
+    }
+    @objc deinit
+  }
+}
+extension Foundation.OutputStream {
+  public func write(byte: Swift.UInt8) -> Swift.Int
+}
+extension Swift.Bool : cryptography_in_use.ASN1CodableType {
+  public init(from asn1: cryptography_in_use.ASN1Object) throws
+  public static func asn1decoded(_ object: cryptography_in_use.ASN1Object) throws -> Swift.Bool
+  public func asn1encode(tag: cryptography_in_use.ASN1DecodedTag? = nil) throws -> cryptography_in_use.ASN1Object
+}
+public struct ObjectIdentifier : Swift.Equatable, Swift.Hashable {
+  public let rawValue: Swift.String
+  public static func from(string: Swift.String) throws -> cryptography_in_use.ObjectIdentifier
+  public static func == (a: cryptography_in_use.ObjectIdentifier, b: cryptography_in_use.ObjectIdentifier) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension cryptography_in_use.ObjectIdentifier : cryptography_in_use.ASN1CodableType {
+  public func asn1encode(tag: cryptography_in_use.ASN1DecodedTag? = nil) throws -> cryptography_in_use.ASN1Object
+  public init(from asn1: cryptography_in_use.ASN1Object) throws
+}
+extension Swift.String {
+  public var characterSet: Swift.Set<Swift.Character> {
+    get
+  }
+}
+extension Swift.Int : cryptography_in_use.ASN1EncodableType {
+  public func asn1encode(tag: cryptography_in_use.ASN1DecodedTag?) throws -> cryptography_in_use.ASN1Object
+}
+public enum ASN1Error : Swift.Error, Swift.Equatable {
+  case malformedEncoding(Swift.String)
+  case unsupported(Swift.String)
+  case internalError(Swift.String)
+  case internalInconsistency(Swift.String)
+  public static func == (a: cryptography_in_use.ASN1Error, b: cryptography_in_use.ASN1Error) -> Swift.Bool
+}
+@_hasMissingDesignatedInitializers public class X509Certificate : Swift.CustomStringConvertible {
+  convenience public init(data: Foundation.Data) throws
+  public init(der: Foundation.Data) throws
+  convenience public init(pem: Foundation.Data) throws
+  public var description: Swift.String {
+    get
+  }
+  public func checkValidity(_ date: Foundation.Date = Date()) -> Swift.Bool
+  public var version: Swift.Int? {
+    get
+  }
+  public var serialNumber: Foundation.Data? {
+    get
+  }
+  public var issuerDistinguishedName: Swift.String? {
+    get
+  }
+  public var issuerOIDs: [Swift.String] {
+    get
+  }
+  public func issuer(oidString: Swift.String) -> Swift.String?
+  public func issuer(oid: cryptography_in_use.OID) -> Swift.String?
+  @available(*, deprecated, message: "Use issuer(oid:) instead")
+  public func issuer(dn: cryptography_in_use.ASN1DistinguishedNames) -> Swift.String?
+  public var subjectDistinguishedName: Swift.String? {
+    get
+  }
+  public var subjectOIDs: [Swift.String] {
+    get
+  }
+  public func subject(oidString: Swift.String) -> [Swift.String]?
+  public func subject(oid: cryptography_in_use.OID) -> [Swift.String]?
+  @available(*, deprecated, message: "Use subject(oid:) instead")
+  public func subject(dn: cryptography_in_use.ASN1DistinguishedNames) -> [Swift.String]?
+  public var notBefore: Foundation.Date? {
+    get
+  }
+  public var notAfter: Foundation.Date? {
+    get
+  }
+  public var signature: Foundation.Data? {
+    get
+  }
+  public var sigAlgName: Swift.String? {
+    get
+  }
+  public var sigAlgOID: Swift.String? {
+    get
+  }
+  public var sigAlgParams: Foundation.Data? {
+    get
+  }
+  public var keyUsage: [Swift.Bool] {
+    get
+  }
+  public var extendedKeyUsage: [Swift.String] {
+    get
+  }
+  public var subjectAlternativeNames: [Swift.String] {
+    get
+  }
+  public var issuerAlternativeNames: [Swift.String] {
+    get
+  }
+  public var publicKey: cryptography_in_use.X509PublicKey? {
+    get
+  }
+  public var criticalExtensionOIDs: [Swift.String] {
+    get
+  }
+  public var nonCriticalExtensionOIDs: [Swift.String] {
+    get
+  }
+  public func extensionObject(oid: cryptography_in_use.OID) -> cryptography_in_use.X509Extension?
+  public func extensionObject(oid: Swift.String) -> cryptography_in_use.X509Extension?
+  @objc deinit
+}
+extension Foundation.Data {
+  public var asn1integer: Swift.Int? {
+    get
+  }
+}
+public struct ASN1Int {
+  public var intValue: Swift.Int? {
+    get
+  }
+  public var rawInt: Foundation.Data {
+    get
+  }
+}
+extension cryptography_in_use.ASN1Int : cryptography_in_use.ASN1CodableType {
+  public init(from asn1: cryptography_in_use.ASN1Object) throws
+  public func asn1encode(tag: cryptography_in_use.ASN1DecodedTag?) throws -> cryptography_in_use.ASN1Object
+}
+public enum ASN1Tag : Swift.UInt8 {
+  case implicit
+  case boolean
+  case integer
+  case bitString
+  case octetString
+  case null
+  case objectIdentifier
+  case external
+  case enumerated
+  case sequence
+  case set
+  case numericString
+  case printableString
+  case t61String
+  case videotexString
+  case ia5String
+  case utcTime
+  case generalizedTime
+  case graphicString
+  case visibleString
+  case generalString
+  case universalString
+  case bmpString
+  case utf8String
+  case relativeOID
+  case time
+  public static let universal: Swift.UInt8
+  public static let constructed: Swift.UInt8
+  public static let application: Swift.UInt8
+  public static let `private`: Swift.UInt8
+  public static let tagged: Swift.UInt8
+  public init?(rawValue: Swift.UInt8)
+  public typealias RawValue = Swift.UInt8
+  public var rawValue: Swift.UInt8 {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class CertASN1Object : Swift.CustomStringConvertible {
+  public var rawValue: Foundation.Data?
+  public var value: Any?
+  public var identifier: cryptography_in_use.ASN1Identifier?
+  weak public var parent: cryptography_in_use.CertASN1Object? {
+    get
+  }
+  public func sub(_ index: Swift.Int) -> cryptography_in_use.CertASN1Object?
+  public func subCount() -> Swift.Int
+  public func findOid(_ oid: cryptography_in_use.OID) -> cryptography_in_use.CertASN1Object?
+  public func findOid(_ oid: Swift.String) -> cryptography_in_use.CertASN1Object?
+  public var description: Swift.String {
+    get
+  }
+  public var asString: Swift.String? {
+    get
+  }
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class ASN1DEREncoder {
+  public static func encodeSequence(content: Foundation.Data) -> Foundation.Data
+  @objc deinit
+}
+extension Foundation.Data {
+  public var derEncodedSequence: Foundation.Data {
+    get
+  }
+}
+public protocol ASN1EncodableType {
+  func asn1encode(tag: cryptography_in_use.ASN1DecodedTag?) throws -> cryptography_in_use.ASN1Object
+}
+public protocol ASN1DecodableType {
+  init(from asn1: cryptography_in_use.ASN1Object) throws
+}
+public typealias ASN1CodableType = cryptography_in_use.ASN1DecodableType & cryptography_in_use.ASN1EncodableType
+public protocol ASN1Object {
+  var tag: cryptography_in_use.ASN1DecodedTag { get }
+  var data: cryptography_in_use.ASN1Data { get }
+  var length: Swift.Int { get }
+  var constructed: Swift.Bool { get }
+}
+extension cryptography_in_use.ASN1Object {
+  public var tagNo: Swift.UInt? {
+    get
+  }
+}
+public func create(tag: cryptography_in_use.ASN1DecodedTag, data: cryptography_in_use.ASN1Data) -> cryptography_in_use.ASN1Object
+extension cryptography_in_use.ASN1Object {
+  public subscript(tag: cryptography_in_use.ASN1DecodedTag) -> cryptography_in_use.ASN1Object? {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class GeneralizedTimeDateFormatter {
+  public static func date(from generalizedTime: Swift.String) -> Foundation.Date?
+  @objc deinit
+}
+extension Swift.String : cryptography_in_use.ASN1CodableType {
+  public func asn1encode(tag: cryptography_in_use.ASN1DecodedTag?) throws -> cryptography_in_use.ASN1Object
+  public init(from asn1: cryptography_in_use.ASN1Object) throws
+}
+@_hasMissingDesignatedInitializers public class CertASN1DERDecoder {
+  public static func decode(data: Foundation.Data) throws -> [cryptography_in_use.CertASN1Object]
+  @objc deinit
+}
+extension Foundation.Data {
+  public var uint64Value: Swift.UInt64? {
+    get
+  }
+}
+extension Foundation.Data {
+  public var sequenceContent: Foundation.Data {
+    get
+  }
+}
+extension Foundation.Date : cryptography_in_use.ASN1CodableType {
+  public init(from asn1: cryptography_in_use.ASN1Object) throws
+  public static func asn1decoded(_ object: cryptography_in_use.ASN1Object) throws -> Foundation.Date
+  public func asn1encode(tag: cryptography_in_use.ASN1DecodedTag? = nil) throws -> cryptography_in_use.ASN1Object
+}
+public enum ASN1Data {
+  case primitive(Foundation.Data)
+  case constructed([cryptography_in_use.ASN1Object])
+  public var length: Swift.Int {
+    get
+  }
+  public var items: [cryptography_in_use.ASN1Object]? {
+    get
+  }
+  public var primitive: Foundation.Data? {
+    get
+  }
+}
+extension cryptography_in_use.ASN1Data {
+  public func fold<T>(_ primitive: @escaping (Foundation.Data) throws -> T, _ constructed: ([cryptography_in_use.ASN1Object]) throws -> T) rethrows -> T
+}
+extension cryptography_in_use.ASN1Object {
+  public func wrap(with tag: cryptography_in_use.ASN1DecodedTag, constructed: Swift.Bool = true) -> cryptography_in_use.ASN1Object
+}
+extension cryptography_in_use.ASN1Object {
+  public func serialize() throws -> Foundation.Data
+}
+public enum OID : Swift.String {
+  case etsiQcsCompliance
+  case etsiQcsRetentionPeriod
+  case etsiQcsQcSSCD
+  case dsa
+  case ecPublicKey
+  case prime256v1
+  case ecdsaWithSHA256
+  case ecdsaWithSHA512
+  case rsaEncryption
+  case sha256WithRSAEncryption
+  case md5WithRSAEncryption
+  case sha1WithRSAEncryption
+  case sha1
+  case pkcsSha256
+  case sha2Family
+  case sha3_244
+  case sha3_256
+  case sha3_384
+  case md5
+  case pkcs7data
+  case pkcs7signedData
+  case pkcs7envelopedData
+  case emailAddress
+  case signingCertificateV2
+  case contentType
+  case messageDigest
+  case cmsAlgorithmProtection
+  case signingTime
+  case certificateExtension
+  case jurisdictionLocalityName
+  case jurisdictionStateOrProvinceName
+  case jurisdictionCountryName
+  case authorityInfoAccess
+  case qcStatements
+  case cps
+  case unotice
+  case serverAuth
+  case clientAuth
+  case ocsp
+  case caIssuers
+  case dateOfBirth
+  case sha256
+  case VeriSignEVpolicy
+  case extendedValidation
+  case organizationValidated
+  case subjectKeyIdentifier
+  case keyUsage
+  case subjectAltName
+  case issuerAltName
+  case basicConstraints
+  case cRLDistributionPoints
+  case certificatePolicies
+  case authorityKeyIdentifier
+  case extKeyUsage
+  case subjectDirectoryAttributes
+  case commonName
+  case surname
+  case serialNumber
+  case countryName
+  case localityName
+  case stateOrProvinceName
+  case streetAddress
+  case organizationName
+  case organizationalUnitName
+  case businessCategory
+  case postalCode
+  case givenName
+  case dnQualifier
+  case domainComponent
+  case userId
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
+public enum ASN1DecodedTag : Swift.Equatable {
+  case applicationTag(Swift.UInt)
+  case taggedTag(Swift.UInt)
+  case universal(cryptography_in_use.ASN1Tag)
+  case privateTag(Swift.UInt)
+  public static func == (a: cryptography_in_use.ASN1DecodedTag, b: cryptography_in_use.ASN1DecodedTag) -> Swift.Bool
+}
+extension cryptography_in_use.ASN1DecodedTag {
+  public var isApplicationSpecific: Swift.Bool {
+    get
+  }
+  public var isContextSpecific: Swift.Bool {
+    get
+  }
+  public var isUniversal: Swift.Bool {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers @available(*, deprecated, message: "Use OID instead")
+public class ASN1DistinguishedNames {
+  final public let oid: Swift.String
+  final public let representation: Swift.String
+  public static let commonName: cryptography_in_use.ASN1DistinguishedNames
+  public static let dnQualifier: cryptography_in_use.ASN1DistinguishedNames
+  public static let serialNumber: cryptography_in_use.ASN1DistinguishedNames
+  public static let givenName: cryptography_in_use.ASN1DistinguishedNames
+  public static let surname: cryptography_in_use.ASN1DistinguishedNames
+  public static let organizationalUnitName: cryptography_in_use.ASN1DistinguishedNames
+  public static let organizationName: cryptography_in_use.ASN1DistinguishedNames
+  public static let streetAddress: cryptography_in_use.ASN1DistinguishedNames
+  public static let localityName: cryptography_in_use.ASN1DistinguishedNames
+  public static let stateOrProvinceName: cryptography_in_use.ASN1DistinguishedNames
+  public static let countryName: cryptography_in_use.ASN1DistinguishedNames
+  public static let email: cryptography_in_use.ASN1DistinguishedNames
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class ASN1DistinguishedNameFormatter {
+  public static var separator: Swift.String
+  @objc deinit
+}
+extension Foundation.Data {
+  public var unsignedIntValue: Swift.UInt? {
+    get
+  }
+}
+@_hasMissingDesignatedInitializers public class ASN1Decoder {
+  public class func decode(asn1 data: Foundation.Data) throws -> cryptography_in_use.ASN1Object
+  @objc deinit
+}
+public class CryptographyInUseManager {
+  public init()
+  public func makeCmsSignedAttributes(certificate: Swift.String, sampleDocument: Swift.String) -> Foundation.Data
+  public func makeCmsSignedAttributesWithData(certificate: Swift.String, sampleDocument: Foundation.Data) -> Foundation.Data
+  public func makeCmsSignedData(signature: Swift.String) -> Swift.String
+  public func makePublicKeyForServer(clientPrivatekey: Security.SecKey) -> Swift.String
+  public func makeAes256SharedSecretKey(serverPublicKeyPem: Swift.String, clientPrivatekey: Security.SecKey) -> Swift.String
+  @objc deinit
+}
+extension Foundation.Data : cryptography_in_use.ASN1CodableType {
+  public init(from asn1: cryptography_in_use.ASN1Object) throws
+  public init(bitString: Foundation.Data) throws
+  public static func asn1decoded(_ object: cryptography_in_use.ASN1Object) throws -> Foundation.Data
+  public func asn1encode(tag: cryptography_in_use.ASN1DecodedTag? = nil) -> cryptography_in_use.ASN1Object
+  public func asn1bitStringEncode(unused bits: Swift.Int = 0, tag: cryptography_in_use.ASN1DecodedTag? = nil) throws -> cryptography_in_use.ASN1Object
+}
+@_hasMissingDesignatedInitializers public class X509PublicKey {
+  public var algOid: Swift.String? {
+    get
+  }
+  public var algName: Swift.String? {
+    get
+  }
+  public var algParams: Swift.String? {
+    get
+  }
+  public var derEncodedKey: Foundation.Data? {
+    get
+  }
+  public var key: Foundation.Data? {
+    get
+  }
+  @objc deinit
+}
+extension Swift.Array : cryptography_in_use.ASN1DecodableType where Element == cryptography_in_use.ASN1Object {
+  public init(from asn1: cryptography_in_use.ASN1Object) throws
+}
+extension Swift.Array where Element == cryptography_in_use.ASN1EncodableType {
+  public func asn1encode(tag: cryptography_in_use.ASN1DecodedTag? = nil) throws -> cryptography_in_use.ASN1Object
+}
+extension Swift.Sequence where Self.Element == cryptography_in_use.ASN1EncodableType {
+  public func asn1encode(tag: cryptography_in_use.ASN1DecodedTag? = nil) throws -> cryptography_in_use.ASN1Object
+}
+@_hasMissingDesignatedInitializers public class X509Extension {
+  public var oid: Swift.String? {
+    get
+  }
+  public var name: Swift.String? {
+    get
+  }
+  public var isCritical: Swift.Bool {
+    get
+  }
+  public var value: Any? {
+    get
+  }
+  @objc deinit
+}
+extension cryptography_in_use.ASN1Data : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+extension cryptography_in_use.ASN1Data : Swift.CustomDebugStringConvertible {
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+extension cryptography_in_use.ASN1DecodedTag : Swift.CustomStringConvertible {
+  public var description: Swift.String {
+    get
+  }
+}
+extension cryptography_in_use.ASN1DecodedTag : Swift.CustomDebugStringConvertible {
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+extension cryptography_in_use.ASN1Identifier.Class : Swift.Equatable {}
+extension cryptography_in_use.ASN1Identifier.Class : Swift.Hashable {}
+extension cryptography_in_use.ASN1Identifier.Class : Swift.RawRepresentable {}
+extension cryptography_in_use.ASN1Identifier.TagNumber : Swift.Equatable {}
+extension cryptography_in_use.ASN1Identifier.TagNumber : Swift.Hashable {}
+extension cryptography_in_use.ASN1Identifier.TagNumber : Swift.RawRepresentable {}
+extension cryptography_in_use.ASN1Tag : Swift.Equatable {}
+extension cryptography_in_use.ASN1Tag : Swift.Hashable {}
+extension cryptography_in_use.ASN1Tag : Swift.RawRepresentable {}
+extension cryptography_in_use.OID : Swift.Equatable {}
+extension cryptography_in_use.OID : Swift.Hashable {}
+extension cryptography_in_use.OID : Swift.RawRepresentable {}

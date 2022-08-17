@@ -1,0 +1,4 @@
+framework module DataKit {
+  header "DataKit-Swift.h"
+  requires objc
+}

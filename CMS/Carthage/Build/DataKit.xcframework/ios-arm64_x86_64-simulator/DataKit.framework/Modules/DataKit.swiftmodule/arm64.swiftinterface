@@ -1,0 +1,79 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.3.2 (swiftlang-1200.0.45 clang-1200.0.32.28)
+// swift-module-flags: -target arm64-apple-ios12.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name DataKit
+import Foundation
+import Swift
+extension Array where Element == Swift.UInt8 {
+  public var data: Foundation.Data {
+    get
+  }
+}
+public enum Base64 {
+  case standard
+  case urlSafe
+  public enum Mode {
+    case failOnInvalidCharacters
+    case ignoreWhiteSpaceAndNewline
+    case ignoreInvalidCharacters
+    public func decodedLength(_ data: Foundation.Data) -> Swift.Int
+    public static func == (a: DataKit.Base64.Mode, b: DataKit.Base64.Mode) -> Swift.Bool
+    public var hashValue: Swift.Int {
+      get
+    }
+    public func hash(into hasher: inout Swift.Hasher)
+  }
+  public enum Padding {
+    case none
+    case padding
+    public func encodedLength(_ data: Foundation.Data, lineFeeds: Swift.Int = 0) -> Swift.Int
+    public static func == (a: DataKit.Base64.Padding, b: DataKit.Base64.Padding) -> Swift.Bool
+    public var hashValue: Swift.Int {
+      get
+    }
+    public func hash(into hasher: inout Swift.Hasher)
+  }
+  public enum Error : Swift.Error {
+    case invalidBase64String
+    public static func == (a: DataKit.Base64.Error, b: DataKit.Base64.Error) -> Swift.Bool
+    public var hashValue: Swift.Int {
+      get
+    }
+    public func hash(into hasher: inout Swift.Hasher)
+  }
+  public func encode(data: Foundation.Data, with padding: DataKit.Base64.Padding = .padding, lineFeeds: Swift.Int = 0) -> Foundation.Data
+  public static func decode(string: Swift.String, mode: DataKit.Base64.Mode = .failOnInvalidCharacters) throws -> Foundation.Data
+  public static func decode(data: Foundation.Data, mode: DataKit.Base64.Mode = .failOnInvalidCharacters) throws -> Foundation.Data
+  public static func == (a: DataKit.Base64, b: DataKit.Base64) -> Swift.Bool
+  public var hashValue: Swift.Int {
+    get
+  }
+  public func hash(into hasher: inout Swift.Hasher)
+}
+extension Data {
+  public var asciiString: Swift.String? {
+    get
+  }
+}
+extension Data {
+  public func hexString(separator: Swift.String = "") -> Swift.String
+  public init(hex: Swift.String) throws
+}
+public enum HexStringParsingError : Swift.Error, Swift.Equatable {
+  case illegalCharacters(pattern: Swift.String, index: Swift.Int, literal: Swift.String)
+  case invalidLength(Swift.Int)
+  case unknownError
+  public static func == (a: DataKit.HexStringParsingError, b: DataKit.HexStringParsingError) -> Swift.Bool
+}
+extension Data {
+  public var utf8string: Swift.String? {
+    get
+  }
+}
+extension DataKit.Base64 : Swift.Equatable {}
+extension DataKit.Base64 : Swift.Hashable {}
+extension DataKit.Base64.Mode : Swift.Equatable {}
+extension DataKit.Base64.Mode : Swift.Hashable {}
+extension DataKit.Base64.Padding : Swift.Equatable {}
+extension DataKit.Base64.Padding : Swift.Hashable {}
+extension DataKit.Base64.Error : Swift.Equatable {}
+extension DataKit.Base64.Error : Swift.Hashable {}

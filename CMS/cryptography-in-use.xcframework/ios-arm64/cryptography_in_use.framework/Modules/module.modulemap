@@ -1,0 +1,11 @@
+framework module cryptography_in_use {
+  umbrella header "cryptography_in_use.h"
+
+  export *
+  module * { export * }
+}
+
+module cryptography_in_use.Swift {
+    header "cryptography_in_use-Swift.h"
+    requires objc
+}

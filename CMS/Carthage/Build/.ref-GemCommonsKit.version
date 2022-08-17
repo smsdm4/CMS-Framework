@@ -1,0 +1,31 @@
+{
+  "commitish" : "1.2.0",
+  "iOS" : [
+    {
+      "swiftToolchainVersion" : "5.3.2 (swiftlang-1200.0.45 clang-1200.0.32.28)",
+      "hash" : "4c1210996eba6ff6480b904619aa0cdcbd9a5ba181ffe0237eb917bf6f0d688c",
+      "name" : "GemCommonsKit",
+      "container" : "GemCommonsKit.xcframework",
+      "identifier" : "ios-arm64"
+    },
+    {
+      "swiftToolchainVersion" : "5.3.2 (swiftlang-1200.0.45 clang-1200.0.32.28)",
+      "hash" : "370fab9f7f6438d7dff577d1c04155a13583c1cdb39c706278beffb1689d2668",
+      "name" : "GemCommonsKit",
+      "container" : "GemCommonsKit.xcframework",
+      "identifier" : "ios-arm64_x86_64-simulator"
+    },
+    {
+      "hash" : "1996e7e0d5885f9d5780ed7c3b58d965b8cf6c2a37aee2db3f22be5a3f491944",
+      "name" : "ObjCCommonsKit",
+      "container" : "ObjCCommonsKit.xcframework",
+      "identifier" : "ios-arm64"
+    },
+    {
+      "hash" : "3dd50cf77eb6d072327cc6d0dbe7a79c002c73d9f2310ff28c1e7d4ee1450d2e",
+      "name" : "ObjCCommonsKit",
+      "container" : "ObjCCommonsKit.xcframework",
+      "identifier" : "ios-arm64_x86_64-simulator"
+    }
+  ]
+}
